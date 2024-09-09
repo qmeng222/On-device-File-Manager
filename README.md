@@ -6,6 +6,7 @@
 - Highlights:
 - Tech stack: GPT, Python
 - Workflow:
+  ![project workflow](imgs/workflow.png)
 - Demo:
 
 ### Setup:
@@ -29,4 +30,4 @@
 ### Resources:
 
 1. [Nexa SDK](https://pypi.org/project/nexaai/)
-2. [Nexa Model Hub | Phi-3.5-mini-instruct](https://nexaai.com/microsoft/Phi-3.5-mini-instruct/gguf-fp16/readme)
+2. [Nexa Model Hub](https://www.nexaai.com/models)
