@@ -19,8 +19,8 @@
 2. Upgrade the pip package manager to the latest version within the venv:
    `python -m pip install --upgrade pip`
 3. Install required packages:
-   - Install Nexa SDK: `pip install nexaai`
-   - Install PDF plumber: `pip install pdfplumber`
+   - Install Nexa SDK for inference: `pip install nexaai`
+   - Install PyMuPDF library for data extraction: `pip install PyMuPDF`
 4. Generate a snapshot of the installed packages and their versions to the requirements.txt file (or overwrite the txt file): `pip freeze > requirements.txt`
 
 ### Usage:

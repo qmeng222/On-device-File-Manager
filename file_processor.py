@@ -1,6 +1,5 @@
 import os
-import pdfplumber
-from PIL import Image
+import pymupdf
 
 class FileProcessor:
     def __init__(self):
@@ -8,11 +7,14 @@ class FileProcessor:
 
     # case 1: for PDF file, extract text from each page:
     def process_pdf(self, file_path):
-        with pdfplumber.open(file_path) as pdf:
-            pages = [(page.extract_text() or "").strip() for page in pdf.pages]  # memory-efficient for large docs
-            # print(f"💂‍♀️ PDF first page, first 100 chars:\n{pages[0][:100]}")
-            # print(f"🥼 PDF third page, first 100 chars:\n{pages[2][:100]}")
-            # print(f"👢 PDF last page, last 100 chars:\n{pages[-1][-100:]}")
+        with pymupdf.open(file_path) as doc:
+            pages = []
+            for page in doc:
+                text = page.get_text()
+                pages.append(text.strip())
+            # print(f"1️⃣ PDF > first page > first 300 chars:\n{pages[0][:300]}")
+            # print(f"2️⃣ PDF > third page > first 200 chars:\n{pages[2][:200]}")
+            # print(f"3️⃣ PDF > last page > last 100 chars:\n{pages[-1][-100:]}")
         return "\n".join(pages)
 
     # case 2: for text file, read content directly:
@@ -43,12 +45,12 @@ class FileProcessor:
 
 # # test:
 # processor = FileProcessor()
-# list_of_paths = ['./input_dir/paper.pdf', './input_dir/logo.png', './input_dir/sub_dir2/BS.txt', './input_dir/sub_dir1/animal.jpg']
+# list_of_paths = ['./input_dir/logo.png', './input_dir/paper_2cols.pdf', './input_dir/paper_1col.pdf', './input_dir/sub_dir2/BS.txt', './input_dir/sub_dir1/animal.jpg']
 
 # for file_path in list_of_paths:
 #     try:
 #         content = processor.process_file(file_path)
-#         # print(f"👀 Processed {file_path}")
+#         print(f"👀 Processed {file_path}")
 #         # chunk for summarization ...
 #     except Exception as e:
 #         print(f"💥 Error processing {file_path}: {str(e)}")

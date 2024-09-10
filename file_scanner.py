@@ -14,6 +14,6 @@ def scan_directory(input_dir):
 # # test:
 # input_directory = "./input_dir"
 # list_of_paths = scan_directory(input_directory)
-# # print(f"📚 A list of file paths: {list_of_paths}")
-# # # ['./input_dir/paper.pdf', './input_dir/logo.png', './input_dir/sub_dir2/BS.txt', './input_dir/sub_dir1/animal.jpg']
-# # print(f"📚 Found {len(list_of_paths)} files to process.")
+# print(f"📚 A list of file paths: {list_of_paths}")
+# # ['./input_dir/logo.png', './input_dir/paper_2cols.pdf', './input_dir/paper_1col.pdf', './input_dir/sub_dir2/BS.txt', './input_dir/sub_dir1/animal.jpg']
+# print(f"📚 Found {len(list_of_paths)} files to process.")
