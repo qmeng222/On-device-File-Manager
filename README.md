@@ -20,6 +20,7 @@
    `python -m pip install --upgrade pip`
 3. Install required packages:
    - Install Nexa SDK: `pip install nexaai`
+   - Install PDF plumber: `pip install pdfplumber`
 4. Generate a snapshot of the installed packages and their versions to the requirements.txt file (or overwrite the txt file): `pip freeze > requirements.txt`
 
 ### Usage:
