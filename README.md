@@ -2,11 +2,11 @@
 
 ### Introduction:
 
-- Description: A self-organizing file manager that uses Nexa SDK and the Phi-3.5 model to automatically summarize, classify, rename, and organize files based on their content.
+- Description: A self-organizing file manager that uses Nexa SDK and NLP models to automatically summarize, classify, rename, and organize files based on their content.
 - Highlights:
 - Tech stack: GPT, Python
 - Workflow:
-  ![project workflow](imgs/workflow.png)
+  ![project workflow](assets/workflow.png)
 - Demo:
 
 ### Setup:
