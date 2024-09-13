@@ -12,21 +12,16 @@ class FileProcessor:
             for page in doc:
                 text = page.get_text()
                 pages.append(text.strip())
-            # print(f"1️⃣ PDF > first page > first 300 chars:\n{pages[0][:300]}")
-            # print(f"2️⃣ PDF > third page > first 200 chars:\n{pages[2][:200]}")
-            # print(f"3️⃣ PDF > last page > last 100 chars:\n{pages[-1][-100:]}")
         return "\n".join(pages)
 
     # case 2: for text file, read content directly:
     def process_text(self, file_path):
         with open(file_path, 'r', encoding='utf-8') as text_file:
             text_content = text_file.read().strip()
-            # print(f"📝 Text file content:\n{text_content}")
             return text_content
 
     # case 3: for image, return file path for later use:
     def process_image(self, file_path):
-        # print(f"🌠 Image file path: {file_path}")
         return file_path
 
     # determine file type & call the corresponding method:

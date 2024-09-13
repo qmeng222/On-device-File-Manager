@@ -5,9 +5,12 @@
 - Description: A self-organizing file manager that uses Nexa SDK and NLP models to automatically summarize, classify, rename, and organize files based on their content.
 - Highlights:
 - Tech stack: GPT, Python
-- Workflow:
-  ![project workflow](assets/workflow.png)
-- Demo:
+
+### Technical Architecture:
+
+![project workflow](assets/workflow.png)
+
+### Demo:
 
 ### Setup:
 
