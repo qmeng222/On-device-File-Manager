@@ -10,7 +10,11 @@ A self-organizing file manager that uses Nexa SDK and NLP models to automaticall
 
 ### Demo:
 
-![project demo](./assets/demo.png)
+- File processing:
+  ![project demo](./assets/demo.png)
+- File reorganization:
+  After processing, files are renamed, classified, and reorganized.
+  ![tree structure](./assets/output_tree_structure.png)
 
 ### Setup:
 
