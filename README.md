@@ -35,3 +35,4 @@
 
 1. [Nexa SDK](https://pypi.org/project/nexaai/)
 2. [Nexa Model Hub](https://www.nexaai.com/models)
+3. [Nexa SDK | GGUF Interface](https://docs.nexaai.com/sdk/python-interface/gguf)

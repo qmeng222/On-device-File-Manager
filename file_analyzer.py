@@ -7,7 +7,7 @@ class FileAnalyzer:
     def __init__(self, nlp_model_path: str, vlm_model_path: str):
         self.classifications = [
             "research_papers",
-            "financial_docs",
+            "financial_documents",
             "family_photos",
             "landscape_photos",
         ]
