@@ -39,7 +39,7 @@ class FileAnalyzer:
             raise RuntimeError(f"💥 Failed to initialize inference models: {str(e)}")
 
     def analyze_file(self, file_path: str, content: str) -> Tuple[str, str, str]:
-        # return (new_filename, classification, text_summary/image_description)
+        # return (full_new_filename, classification, text_summary/image_description)
         _, ext = os.path.splitext(file_path)  # (root, ext) tuple
         file_extension = ext.lower()
 
@@ -50,7 +50,9 @@ class FileAnalyzer:
         else:
             raise ValueError(f"💥 Unsupported file type: {file_extension}")
 
-        return new_filename, classification, summary if file_extension in ['.pdf', '.txt'] else description
+        full_new_filename = f"{new_filename.split('.')[0]}{file_extension}"
+
+        return full_new_filename, classification, summary if file_extension in ['.pdf', '.txt'] else description
 
     def _analyze_text(self, content: str) -> Tuple[str, str, str]:
         # return (new_filename, classification, text_summary)
@@ -129,6 +131,10 @@ class FileAnalyzer:
         Filename:"""
         response = self.nlp_inference.create_completion(prompt)
         filename = response['choices'][0]['text'].strip().lower() if response and 'choices' in response else 'unnamed_file'
+
+        # remove leading underscores and ensure the filename doesn't start with a number:
+        filename = re.sub(r'^[_\d-]+', '', filename)
+
         return filename.split()[0]
 
     ######### process IMAGES:
@@ -162,7 +168,7 @@ class FileAnalyzer:
         return response_text
 
     def _classify_image(self, description: str) -> str:
-        prompt = f"""Based on the following image description, choose the single most appropriate category from the list below. The category should best reflect the image's main subject or theme. Respond with one and only one chosen category, exactly as it appears in the list.
+        prompt = f"""Based on the following image description, choose the single most appropriate category from the list below. The category should best reflect the image's main subject. Respond with one and only one chosen category, exactly as it appears in the list.
         Categories: {', '.join(self.classifications)}
         Image description: {description}
         Category:"""
@@ -177,4 +183,8 @@ class FileAnalyzer:
         Filename:"""
         response = self.nlp_inference.create_completion(prompt)
         filename = response['choices'][0]['text'].strip().lower() if response and 'choices' in response else 'unnamed_file'
+
+        # remove leading underscores and ensure the filename doesn't start with a number:
+        filename = re.sub(r'^[_\d-]+', '', filename)
+
         return filename.split()[0]

@@ -2,15 +2,15 @@
 
 ### Introduction:
 
-- Description: A self-organizing file manager that uses Nexa SDK and NLP models to automatically summarize, classify, rename, and organize files based on their content.
-- Highlights:
-- Tech stack: GPT, Python
+A self-organizing file manager that uses Nexa SDK and NLP models to automatically summarize, classify, rename, and organize files based on their content.
 
 ### Technical Architecture:
 
-![project workflow](assets/workflow.png)
+![project workflow](./assets/workflow.png)
 
 ### Demo:
+
+![project demo](./assets/demo.png)
 
 ### Setup:
 
@@ -29,7 +29,9 @@
 ### Usage:
 
 - Clone using the web URL: https://github.com/qmeng222/On-device-File-Manager.git
+- Create and activate your own virtual environment
 - Install all the packages and their respective versions specified in the requirements.txt file: `pip install -r requirements.txt`
+- Run the application: `python main.py`
 
 ### Resources:
 
