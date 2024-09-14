@@ -8,10 +8,8 @@ class FileAnalyzer:
         self.classifications = [
             "research_papers",
             "financial_docs",
-            "marketing_materials",
+            "family_photos",
             "landscape_photos",
-            "animal_images",
-            "miscellaneous",
         ]
 
         try:
@@ -41,26 +39,21 @@ class FileAnalyzer:
             raise RuntimeError(f"💥 Failed to initialize inference models: {str(e)}")
 
     def analyze_file(self, file_path: str, content: str) -> Tuple[str, str, str]:
-        # (new_filename_wo_extension, classification, text_summary/image_description)
-        file_type = self._get_file_type(file_path)
-        if file_type == "text":
-            return self._analyze_text(content)
-        elif file_type == "image":
-            return self._analyze_image(file_path)
-        else:
-            raise ValueError(f"💥 Unsupported file type: {file_type}")
+        # return (new_filename, classification, text_summary/image_description)
+        _, ext = os.path.splitext(file_path)  # (root, ext) tuple
+        file_extension = ext.lower()
 
-    def _get_file_type(self, file_path: str) -> str:
-        ext = os.path.splitext(file_path)[1].lower()
-        if ext in ['.pdf', '.txt']:
-            return "text"
-        elif ext in ['.jpg', '.png']:
-            return "image"
+        if file_extension in ['.pdf', '.txt']:
+            new_filename, classification, summary = self._analyze_text(content)
+        elif file_extension in ['.jpg', '.png']:
+            new_filename, classification, description = self._analyze_image(file_path)
         else:
-            raise ValueError(f"💥 Unsupported file extension: {ext}")
+            raise ValueError(f"💥 Unsupported file type: {file_extension}")
+
+        return new_filename, classification, summary if file_extension in ['.pdf', '.txt'] else description
 
     def _analyze_text(self, content: str) -> Tuple[str, str, str]:
-        # (new_filename_wo_extension, classification, text_summary)
+        # return (new_filename, classification, text_summary)
         try:
             summary = self._recursive_summarize(content)
             classification = self._classify_text(summary)
@@ -70,7 +63,7 @@ class FileAnalyzer:
             raise RuntimeError(f"💥 Error analyzing text: {str(e)}")
 
     def _analyze_image(self, file_path: str) -> Tuple[str, str, str]:
-        # (new_filename_wo_extension, classification, image_description)
+        # return (new_filename, classification, image_description)
         try:
             description = self._generate_image_description(file_path)
             classification = self._classify_image(description)
@@ -120,23 +113,23 @@ class FileAnalyzer:
 
         return self._recursive_summarize(combined_summary, max_length)
 
-    def _classify_text(self, summary: str) -> str:
-        prompt = f"""Based on the following summary, choose the single most appropriate category from the list below. The category should best reflect the document's main theme or purpose. Respond with one and only one chosen category, exactly as it appears in the list.
+    def _classify_text(self, summary: str, max_attempts: int = 3) -> str:
+        prompt = f"""Based on the following summary, choose the single most appropriate category from the list below. The category should best reflect the document's main theme. Respond with one and only one chosen category, exactly as it appears in the list.
         Categories: {', '.join(self.classifications)}
         Summary: {summary}
         Category:"""
 
         response = self.nlp_inference.create_completion(prompt)
-        classification = response['choices'][0]['text'].strip().lower() if response and 'choices' in response else 'miscellaneous'
-        return classification
+        classification = response['choices'][0]['text'].strip().lower()
+        return classification if classification in self.classifications else 'miscellaneous'
 
     def _generate_text_filename(self, summary: str) -> str:
-        prompt = f"""Generate a short (max 3 words), descriptive filename (without extension) for a document with the following summary. Use only lowercase letters and separate words with underscores.
+        prompt = f"""Generate a short (max 3 words), descriptive filename (without file extension) for a document with the following summary. Use only lowercase letters and collect words with underscores.
         Summary: {summary}
         Filename:"""
         response = self.nlp_inference.create_completion(prompt)
         filename = response['choices'][0]['text'].strip().lower() if response and 'choices' in response else 'unnamed_file'
-        return filename
+        return filename.split()[0]
 
     ######### process IMAGES:
 
@@ -169,19 +162,19 @@ class FileAnalyzer:
         return response_text
 
     def _classify_image(self, description: str) -> str:
-        prompt = f"""Classify the following image description into the most appropriate category from the list below. Choose only one category that best represents the image's description. Respond with one and only one chosen category, exactly as it appears in the list.
+        prompt = f"""Based on the following image description, choose the single most appropriate category from the list below. The category should best reflect the image's main subject or theme. Respond with one and only one chosen category, exactly as it appears in the list.
         Categories: {', '.join(self.classifications)}
         Image description: {description}
         Category:"""
 
         response = self.nlp_inference.create_completion(prompt)
-        classification = response['choices'][0]['text'].strip().lower() if response and 'choices' in response else "miscellaneous"
-        return classification
+        classification = response['choices'][0]['text'].strip().lower()
+        return classification if classification in self.classifications else 'miscellaneous'
 
     def _generate_image_filename(self, description: str) -> str:
-        prompt = f"""Generate a short (max 3 words), descriptive filename (without extension) for an image with the following description. Use only lowercase letters and separate words with underscores.
+        prompt = f"""Generate a short (max 3 words), descriptive filename (without file extension) for an image with the following description. Use only lowercase letters and collect words with underscores.
         Description: {description}
         Filename:"""
         response = self.nlp_inference.create_completion(prompt)
         filename = response['choices'][0]['text'].strip().lower() if response and 'choices' in response else 'unnamed_file'
-        return filename
+        return filename.split()[0]
