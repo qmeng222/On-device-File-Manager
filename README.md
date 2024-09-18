@@ -12,8 +12,7 @@ A self-organizing file manager that uses Nexa SDK and NLP models to automaticall
 
 - File processing:
   ![project demo](./assets/demo.png)
-- File reorganization:
-  After processing, files are renamed, classified, and reorganized.
+- File reorganization: After processing, files are renamed, classified, and reorganized.
   ![tree structure](./assets/output_tree_structure.png)
 
 ### Setup:
@@ -28,12 +27,13 @@ A self-organizing file manager that uses Nexa SDK and NLP models to automaticall
 3. Install required packages:
    - Install Nexa SDK for inference: `pip install nexaai`
    - Install PyMuPDF library for data extraction: `pip install PyMuPDF`
+   - Install aiofiles library to work with files asynchronously: `pip install aiofiles`
 4. Generate a snapshot of the installed packages and their versions to the requirements.txt file (or overwrite the txt file): `pip freeze > requirements.txt`
 
 ### Usage:
 
 - Clone using the web URL: https://github.com/qmeng222/On-device-File-Manager.git
-- Create and activate your own virtual environment
+- Ensure you are in the root directory of this project, then create and activate your virtual environment.
 - Install all the packages and their respective versions specified in the requirements.txt file: `pip install -r requirements.txt`
 - Run the application: `python main.py`
 
