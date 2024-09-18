@@ -1,6 +1,7 @@
 import os
 import shutil  # do high-level operations on a file (eg: moving)
 import traceback  # print stack traces of Python programs
+import time
 from multiprocessing import Pool, cpu_count
 from functools import partial
 from file_scanner import scan_directory
@@ -41,39 +42,44 @@ def process_file(file_path, output_directory, nlp_model_path, vlm_model_path):
        print("------" * 6)
 
 def main():
-   # configuration:
-   input_directory = "./input_dir"
-   output_directory = "./output_organized_dir"
-   nlp_model_path = "llama2"
-   vlm_model_path = "nanollava"
+    start_time = time.time()
 
-   # step 1: file scanner
-   list_of_paths = scan_directory(input_directory)
-   total_files = len(list_of_paths)
-   print(f"👀 Found {total_files} files to process.")
+    # configuration:
+    input_directory = "./input_dir"
+    output_directory = "./output_organized_dir"
+    nlp_model_path = "llama2"
+    vlm_model_path = "nanollava"
 
-   if total_files == 0:
-       print("💥 No files to process. Exiting.")
-       return
+    # step 1: file scanner
+    list_of_paths = scan_directory(input_directory)
+    total_files = len(list_of_paths)
+    print(f"👀 Found {total_files} files to process.")
 
-   # determine the number of processes:
-   num_processes = min(cpu_count(), total_files)
-   # print(f"❓ Number of processes: {num_processes}")
+    if total_files == 0:
+        print("💥 No files to process. Exiting.")
+        return
 
-   # a pool of worker processes:
-   with Pool(processes=num_processes) as pool:
-       results = pool.starmap(process_file, [(file_path, output_directory, nlp_model_path, vlm_model_path) for file_path in list_of_paths])
-   print(f"🎉 Completed processing {total_files} files.")
+    # determine the number of processes:
+    num_processes = min(cpu_count(), total_files)
+    # print(f"❓ Number of processes: {num_processes}")
 
-   # step 5: remove empty subdirectories in the input_directory
-   try:
-       for root, dirs, _ in os.walk(input_directory, topdown=False):
-           for dir_name in dirs:
-               os.rmdir(os.path.join(root, dir_name))
-       print(f"👉 All subdirectories in '{input_directory}' have been removed.")
-   except Exception as e:
-       print(f"💥 Error removing subdirectories: {str(e)}")
-       traceback.print_exc()
+    # a pool of worker processes:
+    with Pool(processes=num_processes) as pool:
+        results = pool.starmap(process_file, [(file_path, output_directory, nlp_model_path, vlm_model_path) for file_path in list_of_paths])
+    print(f"🎉 Completed processing {total_files} files.")
+
+    end_time = time.time()
+    print(f"⏰ Total execution time: {end_time - start_time:.2f} seconds")
+
+    # step 5: remove empty subdirectories in the input_directory
+    try:
+        for root, dirs, _ in os.walk(input_directory, topdown=False):
+            for dir_name in dirs:
+                os.rmdir(os.path.join(root, dir_name))
+        print(f"👉 All subdirectories in '{input_directory}' have been removed.")
+    except Exception as e:
+        print(f"💥 Error removing subdirectories: {str(e)}")
+        traceback.print_exc()
 
 if __name__ == "__main__":
    try:
